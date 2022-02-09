@@ -20,7 +20,7 @@ class NotesService {
     };
 
     const result = await this._pool.query(query);
- 
+
     if (!result.rows[0].id) {
       throw new InvariantError('Catatan gagal ditambahkan');
     }
@@ -35,15 +35,16 @@ class NotesService {
 
   async getNoteById(id) {
     const query = {
-        text: 'SELECT * FROM notes WHERE id = $1',
-        values: [id],
+      text: 'SELECT * FROM notes WHERE id = $1',
+      values: [id],
     };
     const result = await this._pool.query(query);
-    if (!result.rows.length) {
-        throw new NotFoundError('Catatan tidak ditemukan');
-      }
 
-      return result.rows.map(mapDBToModel)[0];
+    if (!result.rows.length) {
+      throw new NotFoundError('Catatan tidak ditemukan');
+    }
+
+    return result.rows.map(mapDBToModel)[0];
   }
 
   async editNoteById(id, { title, body, tags }) {
@@ -62,14 +63,14 @@ class NotesService {
 
   async deleteNoteById(id) {
     const query = {
-        text: 'DELETE FROM notes WHERE id = $1 RETURNING id',
-        values: [id],
+      text: 'DELETE FROM notes WHERE id = $1 RETURNING id',
+      values: [id],
     };
 
     const result = await this._pool.query(query);
 
     if (!result.rows.length) {
-        throw new NotFoundError('Catatan gagal dihapus. Id tidak ditemukan');
+      throw new NotFoundError('Catatan gagal dihapus. Id tidak ditemukan');
     }
   }
 }
