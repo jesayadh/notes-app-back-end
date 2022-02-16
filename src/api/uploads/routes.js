@@ -1,5 +1,5 @@
 const path = require('path');
-     
+
 const routes = (handler) => [
   {
     method: 'POST',
@@ -23,5 +23,5 @@ const routes = (handler) => [
     },
   },
 ];
- 
+
 module.exports = routes;

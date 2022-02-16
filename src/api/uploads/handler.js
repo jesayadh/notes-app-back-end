@@ -1,24 +1,24 @@
 const ClientError = require('../../exceptions/ClientError');
-     
+
 class UploadsHandler {
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
- 
+
     this.postUploadImageHandler = this.postUploadImageHandler.bind(this);
   }
- 
+
   async postUploadImageHandler(request, h) {
     try {
       const { data } = request.payload;
       this._validator.validateImageHeaders(data.hapi.headers);
- 
-      const filename = await this._service.writeFile(data, data.hapi);
- 
+
+      const fileLocation = await this._service.writeFile(data, data.hapi);
+
       const response = h.response({
         status: 'success',
         data: {
-          fileLocation: `http://${process.env.HOST}:${process.env.PORT}/upload/images/${filename}`,
+          fileLocation,
         },
       });
       response.code(201);
@@ -32,7 +32,7 @@ class UploadsHandler {
         response.code(error.statusCode);
         return response;
       }
- 
+
       // Server ERROR!
       const response = h.response({
         status: 'error',
@@ -44,5 +44,5 @@ class UploadsHandler {
     }
   }
 }
- 
+
 module.exports = UploadsHandler;
